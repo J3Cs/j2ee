@@ -9,10 +9,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -58,6 +63,11 @@ public class Ejemplar implements Serializable {
     @Column(name = "FECHA_DEVOLUCION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaDevolucion;
+    @JoinTable(name = "EJEMPLAR_POR_OBRA", joinColumns = {
+        @JoinColumn(name = "ID_EJEMPLAR", referencedColumnName = "ID_EJEMPLAR")}, inverseJoinColumns = {
+        @JoinColumn(name = "ID_OBRA", referencedColumnName = "ID_OBRA")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Obra> obraList;
 
     public Ejemplar() {
     }
@@ -110,6 +120,14 @@ public class Ejemplar implements Serializable {
 
     public void setFechaDevolucion(Date fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public List<Obra> getObraList() {
+        return obraList;
+    }
+
+    public void setObraList(List<Obra> obraList) {
+        this.obraList = obraList;
     }
 
     @Override

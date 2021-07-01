@@ -27,18 +27,20 @@ public abstract class PruebaFacade<T> implements Serializable {
    public void create(T entity){
        EntityManager em = getEntityManager();
        try {
-           em.persist(em);
+           em.persist(entity);
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
    }
    
     public void delete(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
+        EntityManager em = getEntityManager();
+        em.remove(em.merge(entity));
     }
 
     public void update(T entity) {
-        getEntityManager().merge(entity);
+        EntityManager em = getEntityManager();
+        em.merge(entity);
     }
 
     public List<T> findAll() {

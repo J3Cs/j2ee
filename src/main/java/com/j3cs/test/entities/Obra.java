@@ -8,10 +8,13 @@ package com.j3cs.test.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -56,6 +59,10 @@ public class Obra implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "ID_AUTOR")
     private String idAutor;
+    @ManyToMany(mappedBy = "obraList", fetch = FetchType.LAZY)
+    private List<Autor> autorList;
+    @ManyToMany(mappedBy = "obraList", fetch = FetchType.LAZY)
+    private List<Ejemplar> ejemplarList;
 
     public Obra() {
     }
@@ -108,6 +115,22 @@ public class Obra implements Serializable {
 
     public void setIdAutor(String idAutor) {
         this.idAutor = idAutor;
+    }
+
+    public List<Autor> getAutorList() {
+        return autorList;
+    }
+
+    public void setAutorList(List<Autor> autorList) {
+        this.autorList = autorList;
+    }
+
+    public List<Ejemplar> getEjemplarList() {
+        return ejemplarList;
+    }
+
+    public void setEjemplarList(List<Ejemplar> ejemplarList) {
+        this.ejemplarList = ejemplarList;
     }
 
     @Override

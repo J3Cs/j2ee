@@ -6,6 +6,8 @@
 package com.j3cs.test.datos.acceso;
 
 import com.j3cs.test.entities.Autor;
+import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +28,10 @@ public class AutorFacadeLocal extends PruebaFacade<Autor> implements AutorLocal{
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    public List<Autor> obraPorAutor(BigDecimal idObra){
+        return em.createNamedQuery("Autor.ObrasPorModelo").setParameter("idObra", idObra).getResultList();
     }
     
 }

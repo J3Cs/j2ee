@@ -39,13 +39,35 @@ public abstract class GenericBean<T> implements Serializable {
         this.lista = lista;
     }
     
-    void create(){
+    public void create(){
         if (getfacadelocal() != null) {
             try {
                 getfacadelocal().create(getEntity());
                 setE(getEntity());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } catch (Exception err) {
+                    System.out.println(err.getMessage());
+            }
+        }
+    }
+    
+    public void update(){
+        if (getfacadelocal() != null) {
+            try {
+                getfacadelocal().update(getEntity());
+                setE(getEntity());
+            } catch (Exception err) {
+                    System.out.println(err.getMessage());
+            }
+        }
+    }
+    
+    public void delete(){
+        if (getfacadelocal() != null) {
+            try {
+                getfacadelocal().delete(getEntity());
+                setE(getEntity());
+            } catch (Exception err) {
+                    System.out.println(err.getMessage());
             }
         }
     }

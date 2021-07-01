@@ -7,12 +7,20 @@ package com.j3cs.test.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,7 +30,7 @@ import javax.validation.constraints.Size;
  * @author jcastro
  */
 @Entity
-@Table(name = "autor", schema = "BIBLIOTECA")
+@Table(catalog = "", schema = "BIBLIOTECA")
 @NamedQueries({
     @NamedQuery(name = "Autor.findAll", query = "SELECT a FROM Autor a"),
     @NamedQuery(name = "Autor.findByIdAutor", query = "SELECT a FROM Autor a WHERE a.idAutor = :idAutor"),
@@ -34,9 +42,9 @@ public class Autor implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "ID_AUTOR")
+    @GeneratedValue(generator = "sec_autores", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_autores", sequenceName = "autores_seq", allocationSize = 1)
     private BigDecimal idAutor;
     @Size(max = 200)
     private String nombre;
@@ -44,6 +52,11 @@ public class Autor implements Serializable {
     private String nacionalidad;
     @Size(max = 20)
     private String sexo;
+    @JoinTable(name = "OBRA_POR_AUTOR", joinColumns = {
+        @JoinColumn(name = "ID_AUTOR", referencedColumnName = "ID_AUTOR")}, inverseJoinColumns = {
+        @JoinColumn(name = "ID_OBRA", referencedColumnName = "ID_OBRA")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Obra> obraList;
 
     public Autor() {
     }
@@ -82,6 +95,14 @@ public class Autor implements Serializable {
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public List<Obra> getObraList() {
+        return obraList;
+    }
+
+    public void setObraList(List<Obra> obraList) {
+        this.obraList = obraList;
     }
 
     @Override

@@ -2,25 +2,73 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         <f:view>
-            <h:form>
-                <h:outputText value="No hay registros" rendered="#{empty AutorBean.lista}"/>
-                <h:dataTable value="#{AutorBean.lista}" var="item" rendered="#{not empty AutorBean.lista}">
-                    <h:column >
-                            <f:facet name="header">
-                                <h:outputText value="IdTipoEstadoVehiculo"/>
-                            </f:facet>
-                            <h:outputText  value="#{item.nombre}"/>
-                        </h:column>
+            <h:outputText value="No hay registros" rendered="#{empty AutorBean.lista}"/>
+            <p:dataTable id="tblAutor" value="#{AutorBean.lista}" var="item" 
+                         paginator="true" rows="10"
+                         rendered="#{not empty AutorBean.lista}">
+                <p:autoUpdate />
+                <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Nombre"/>
+                    </f:facet>
+                    <h:outputText  value="#{item.nombre}"/>
+                </p:column>
+                <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Nacionalidad"/>
+                    </f:facet>
+                    <h:outputText  value="#{item.nacionalidad}"/>
+                </p:column>
+                <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Sexo"/>
+                    </f:facet>
+                    <h:outputText  value="#{item.sexo=='M' ? 'Másculino':'Femenino'}"/>
+                </p:column>
+                <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Acciones"/>
+                    </f:facet>
+                    <p:commandButton value="Editar" actionListener="#{AutorBean.rowSelected(item)}" update="frmCrud:pnl" />
+                    <p:commandButton value="Eliminar" actionListener="#{AutorBean.deleteAutor(item)}" update="tblAutor" />
+                </p:column>
+            </p:dataTable>
 
-                </h:dataTable>
+        </f:view>
+
+        <f:view>
+            <h:form id="frmCrud">
+
+                <h2 class="h2">Crear un nuevo registro</h2>
+                <p:panelGrid id="pnl" columns="2" class="pnlGrid">
+                    <h:outputText value="Nombre del autor:" class="outText"/>
+                    <h:inputText value="#{AutorBean.nuevo.nombre}" class="Text"/>
+                    <h:outputText value="Nacionalidad:" class="outText"/>
+                    <h:inputText value="#{AutorBean.nuevo.nacionalidad}" class="Text"/>
+                    <h:outputText value="Sexo" class="outText"/>
+                    <h:inputText value="#{AutorBean.nuevo.sexo}" class="Text"/>
+                    <p:selectOneMenu value="#{AutorBean.nuevo}" converter="player" var="p">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{AutorBean.nuevo.obraList}" var="item" itemLabel="#{item.titulo}" itemValue="#{item}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:panelGrid class="btnpnl">
+                    <p:commandButton value="Agregar" actionListener="#{AutorBean.create}" action="#{AutorBean.limpiar}" update="@all" />
+                    <p:commandButton value="Editar" actionListener="#{AutorBean.update}" action="#{AutorBean.limpiar}" update="@all" />
+                    <p:commandButton value="Cancelar" actionListener="#{AutorBean.limpiar}" update="frmCrud:pnl" />
+                </p:panelGrid>
+
             </h:form>
         </f:view>
+
+
 
     </h:body>
 </html>
